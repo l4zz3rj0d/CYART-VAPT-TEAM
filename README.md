@@ -251,7 +251,8 @@ Tool: OpenVAS / Greenbone Vulnerability Manager
 needs to be configured
 ```
 Week 2/scanning/
-### Repository Structure
+
+## Repository Structure
 
 Week 2/
 ├── Theory/
