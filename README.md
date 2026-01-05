@@ -1,5 +1,23 @@
-# Week 2 – VAPT Lab
+# Week 2 – Vulnerability Assessment & Penetration Testing (VAPT)
 
-This repository contains documentation, scans, exploitation logs, and reports
-for Week 2 VAPT tasks including vulnerability scanning, exploitation,
-post-exploitation, and a full PTES-based capstone project.
+## Objective
+To perform a complete VAPT cycle including scanning, reconnaissance,
+exploitation, post-exploitation, and reporting using a controlled lab setup.
+
+## Environment
+- Attacker: Kali Linux
+- Target: Metasploitable2, DVWA
+- Network: Host-only
+
+## Methodology
+- Reconnaissance
+- Vulnerability Scanning
+- Exploitation
+- Post-Exploitation
+- Reporting
+
+## Tools
+- Nmap
+- Metasploit
+- OpenVAS
+- sqlmap
