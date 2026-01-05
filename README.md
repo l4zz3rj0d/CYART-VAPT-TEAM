@@ -43,59 +43,100 @@ scanning.
 
 ###  Command Used
 ```
-nmap -sC -sV -p- <target-ip>
-Outcome
+nmap -sV  192.168.56.5 -oN nmap_scan.txt
+# Nmap 7.98 scan initiated Mon Jan  5 04:25:28 2026 as: /usr/lib/nmap/nmap --privileged -sV -oN nmap_scan.txt 192.168.56.5
+Nmap scan report for 192.168.56.5
+Host is up (0.0033s latency).
+Not shown: 977 filtered tcp ports (no-response)
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         vsftpd 2.3.4
+22/tcp   open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+23/tcp   open  telnet      Linux telnetd
+25/tcp   open  smtp        Postfix smtpd
+53/tcp   open  domain      ISC BIND 9.4.2
+80/tcp   open  http        Apache httpd 2.2.8 ((Ubuntu) DAV/2)
+111/tcp  open  rpcbind     2 (RPC #100000)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+512/tcp  open  exec        netkit-rsh rexecd
+513/tcp  open  login?
+514/tcp  open  shell       Netkit rshd
+1099/tcp open  java-rmi    GNU Classpath grmiregistry
+1524/tcp open  bindshell   Metasploitable root shell
+2049/tcp open  nfs         2-4 (RPC #100003)
+2121/tcp open  ftp         ProFTPD 1.3.1
+3306/tcp open  mysql       MySQL 5.0.51a-3ubuntu5
+5432/tcp open  postgresql  PostgreSQL DB 8.3.0 - 8.3.7
+5900/tcp open  vnc         VNC (protocol 3.3)
+6000/tcp open  X11         (access denied)
+6667/tcp open  irc         UnrealIRCd
+8009/tcp open  ajp13       Apache Jserv (Protocol v1.3)
+8180/tcp open  http        Apache Tomcat/Coyote JSP engine 1.1
+Service Info: Hosts:  metasploitable.localdomain, irc.Metasploitable.LAN; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Jan  5 04:25:44 2026 -- 1 IP address (1 host up) scanned in 16.46 seconds
+```
+### Outcome
 Multiple network services were identified running outdated or insecure versions,
 indicating a broad attack surface for further assessment.
 
-Evidence Location
+### Evidence Location
 
-swift
-Copy code
 Week 2/Scanning/
-Phase 2: Vulnerability Identification
+
+## Phase 2: Vulnerability Identification
 Based on enumeration results, identified services were analyzed for known
 weaknesses and misconfigurations.
 
-Key Observations
+### Key Observations
 Insecure and legacy services exposed to the network
 
-Weak authentication mechanisms
+### Weak authentication mechanisms
 
 Services commonly associated with publicly known exploits
 
 A vulnerability mapping table was created to correlate services with risk level
 and potential impact.
 
-Documentation
+### Documentation
 
-bash
-Copy code
-Week 2/Scanning/vulnerability_table.md
-Phase 3: Exploitation
+![Identified vulnerabilities mapped from enumeration results](Scanning/vulnerability_table.md)
+
+
+## Phase 3: Exploitation
+
 Tool Used: Metasploit Framework
 
-Activities
+### Activities
 Selection of exploit modules based on identified services
+```
+selection command prompt needed
+```
 
 Successful exploitation of vulnerable service
-
+```
+command prommpt text needed
+```
 Shell access obtained on the target system
-
-Result
+```
+full working bash shell needed 
+```
+### Result
 The target system was successfully compromised, and root-level access was
 achieved due to critical security misconfigurations. This confirms a high to
 critical severity impact.
 
-Evidence Location
+### Evidence Location
 
-swift
-Copy code
 Week 2/Exploitation/
-Phase 4: Post-Exploitation
-Activities
-Verification of privilege level
 
+## Phase 4: Post-Exploitation
+### Activities
+Verification of privilege level
+```
+
+```
 Confirmation of full system compromise
 
 Collection of evidence to validate impact
