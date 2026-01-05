@@ -6,7 +6,6 @@ test against a deliberately vulnerable application in a controlled lab
 environment.
 
 ## Target Environment
-- Platform: TryHackMe
 - Application: Damn Vulnerable Web Application (DVWA)
 - Security Level: Low
 - Web Server: Apache 2.4.7
@@ -95,7 +94,6 @@ Table: users
 ## Tools Used
 - sqlmap
 - Web Browser
-- TryHackMe AttackBox
 
 ## Remediation
 - Use prepared statements (parameterized queries)
