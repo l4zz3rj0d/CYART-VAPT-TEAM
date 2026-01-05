@@ -2,7 +2,7 @@
 
 ## 1. Vulnerability Scanning Techniques
 
-# 1.1 Introduction to Vulnerability Scanning
+## 1.1 Introduction to Vulnerability Scanning
 
 Vulnerability scanning is the process of identifying security weaknesses in systems, networks, and applications using automated tools. It helps organizations understand their attack surface before an attacker exploits it. Vulnerability scanning is a preventive security activity and forms the foundation of vulnerability assessment and penetration testing.
 
