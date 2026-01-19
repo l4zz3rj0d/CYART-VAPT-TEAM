@@ -216,4 +216,18 @@ Using cracked credentials:
 evil-winrm -u Administrator -p badminton -i 10.129.15.41
 ```
 
-This confirms full system compromise.
+
+Administrative shell access was successfully obtained, confirming **full system
+compromise**.
+
+---
+
+## Security Impact
+
+This assessment demonstrates:
+- Web application input validation failure (LFI)
+- Information disclosure via CGI scripts
+- NTLM authentication leakage
+- Weak password policy
+- Remote administrative access via WinRM
+- Complete compromise of the target system
