@@ -78,7 +78,7 @@ OS fingerprinting suggested Windows 10 / Windows Server 2019.
 
 ### Host Discovery
 The web application referenced a domain name: *unika.htb*
-
+![project unika](Capstone/Evidence/hostname.png)
 
 This was added to `/etc/hosts`:
 ```
