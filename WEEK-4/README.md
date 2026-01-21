@@ -26,7 +26,7 @@ and authenticated remote access.
 5. Credential Cracking  
 6. Authenticated Remote Access (Evil-WinRM)  
 7. Mobile Application Testing (DIVA)
-8. API Security Testing (crAPI) *(to be added)*  
+8. API Security Testing (crAPI)  
 ---
 
 ## Phase 1: Network Scanning and Enumeration
@@ -365,3 +365,312 @@ Extract sensitive logic or secrets
 Bypass security controls without authentication
 
 This demonstrates a Hardcoded Secret vulnerability, caused by insecure client-side trust and improper secret handling.
+
+# API Security Testing (OWASP crAPI)
+
+After completing system-level, network, privilege escalation, and mobile testing,
+the next phase of the assessment focused on **API security testing**.
+
+A security assessment was performed against **OWASP crAPI (Completely Ridiculous
+API)** to demonstrate practical API pentesting techniques aligned with the
+**OWASP API Top 10**.
+
+---
+
+## Scope and Environment
+- Target Application: OWASP crAPI  
+- Testing Platform: Kali Linux  
+- Intercepting Proxy: Caido  
+- Environment: Docker-based crAPI lab  
+
+### Testing Methodology
+- Manual request interception  
+- Endpoint analysis  
+- Parameter tampering  
+- Authorization testing  
+- Authentication logic testing  
+
+---
+
+## Tools Used
+- Caido (Intercepting proxy)  
+- Browser  
+- Kali Linux  
+- Docker (crAPI environment)  
+
+---
+
+## Initial Interaction
+A standard user account was created to simulate a real-world attacker context:
+
+```
+{"name":"lazzer","email":"lazzer@hackcorp.com","number":"1234567890","password":"SuperStrong@123"}
+```
+
+## Vulnerability 1: Content Discovery & Sensitive Data Exposure
+### Observation
+
+While browsing the community posts feature, the frontend did not reveal much
+information. However, inspection of backend API responses using Caido revealed
+that the API exposes sensitive user information.
+
+![project post](API_Security_Testing/Evidence/post_section.png)
+The intercepted response contained:
+```
+{
+    "posts": [{
+        "id": "8ArJfCiyJEMMTfQdSjeFsF",
+        "title": "Title 3",
+        "content": "Hello world 3",
+        "author": {
+            "nickname": "Robot",
+            "email": "robot001@example.com",
+            "vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5e5",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.065Z"
+        },
+        "comments": [],
+        "authorid": 3,
+        "CreatedAt": "2026-01-19T18:07:16.065Z"
+    }, {
+        "id": "HV2xMr3G4ufcoAFqLPK6hS",
+        "title": "Title 2",
+        "content": "Hello world 2",
+        "author": {
+            "nickname": "Pogba",
+            "email": "pogba006@example.com",
+            "vehicleid": "cd515c12-0fc1-48ae-8b61-9230b70a845b",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.062Z"
+        },
+        "comments": [],
+        "authorid": 2,
+        "CreatedAt": "2026-01-19T18:07:16.062Z"
+    }, {
+        "id": "3gesMwR9Pq8Lhze53E5c4k",
+        "title": "Title 1",
+        "content": "Hello world 1",
+        "author": {
+            "nickname": "Adam",
+            "email": "adam007@example.com",
+            "vehicleid": "f89b5f21-7829-45cb-a650-299a61090378",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.022Z"
+        },
+        "comments": [],
+        "authorid": 1,
+        "CreatedAt": "2026-01-19T18:07:16.022Z"
+    }],
+    "next_offset": null,
+    "previous_offset": null,
+    "total": 3
+}
+```
+
+This behavior exposes:
+
+- Email addresses
+
+- Internal user identifiers
+
+- Vehicle identifiers
+
+![project cd](API_Security_Testing/Evidence/Content_discovery.png)
+
+### Impact
+
+This represents Excessive Data Exposure, allowing attackers to collect user
+information for further targeted attacks.
+
+
+## Vulnerability 2: IDOR / BOLA (Broken Object Level Authorization)
+### Observation
+
+Using the Contact Mechanic feature, backend requests containing ID parameters
+were observed.
+
+![project mech](API_Security_Testing/Evidence/contact_mechanic.png)
+
+The request included a user-specific identifier.
+
+![project id](API_Security_Testing/Evidence/id_request.png)
+
+By modifying the ID value to another user's ID, data belonging to other users
+became accessible.
+
+![project IDOR](API_Security_Testing/Evidence/IDOR.png)
+
+### Proof of Exploitation
+
+By changing the ID parameter:
+
+- Other users’ details were retrieved
+
+- Vehicle identifiers were exposed
+
+- Additional requests allowed fetching of other users' vehicle locations
+
+Example sensitive field abused:
+
+```
+{
+    "posts": [{
+        "id": "8ArJfCiyJEMMTfQdSjeFsF",
+        "title": "Title 3",
+        "content": "Hello world 3",
+        "author": {
+            "nickname": "Robot",
+            "email": "robot001@example.com",
+            "vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5e5",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.065Z"
+        },
+
+```
+This was later used to successfully retrieve vehicle location information.
+
+![project veh](API_Security_Testing/Evidence/IDOR_vehicle.png)
+
+### Impact
+
+This confirms a BOLA (Broken Object Level Authorization) vulnerability.
+Any authenticated user can access other users’ sensitive data by modifying
+request parameters.
+
+
+## Vulnerability 3: OTP Bypass → Account Takeover
+### Observation
+
+The password reset functionality required OTP verification.
+
+![project otp](API_Security_Testing/Evidence/invalid_otp.png)
+
+Invalid OTP attempts returned:
+```
+{ "message": "Invalid OTP! Please try again.." }
+```
+
+After multiple attempts, rate-limiting was enforced:
+```
+{ "message": "You've exceeded the number of attempts." }
+
+```
+
+### Bypass Technique
+
+By modifying the API version header to an older version, the rate-limiting
+controls were bypassed.
+
+This allowed OTP brute-forcing to succeed.
+
+![project by](API_Security_Testing/Evidence/success_otp.png)
+
+Successful request:
+```
+{"email":"robot001@example.com","otp":"4872","password":"Password@123"}
+
+```
+
+The password reset succeeded, resulting in full account takeover.
+
+![project take](API_Security_Testing/Evidence/account_takeover.png)
+
+### Impact
+
+This vulnerability allows:
+
+- OTP brute-force attacks
+
+- Password reset abuse
+
+- Full account takeover
+
+- Abuse of legacy API versions
+
+This maps to Broken Authentication and Improper API Versioning Controls
+within the OWASP API Top 10.
+
+
+## Conclusion
+
+This VAPT exercise demonstrated a comprehensive security assessment workflow
+covering multiple attack surfaces, including **network services, system-level
+misconfigurations, web applications, APIs, and mobile applications**. The
+assessment progressed from reconnaissance and enumeration to exploitation,
+privilege escalation, and post-exploitation validation across controlled lab
+environments.
+
+Throughout the tasks, several critical weaknesses were identified and
+successfully exploited, including insecure service configurations, broken
+access controls (BOLA/IDOR), authentication and logic flaws, privilege
+escalation through SUID misconfigurations, insecure data exposure, hardcoded
+secrets, insecure logging, and account takeover scenarios within API workflows.
+
+The findings highlight the importance of secure configuration management,
+strong authorization enforcement, proper secret handling, secure API design,
+and regular security testing across all layers of an application ecosystem.
+This work also demonstrates how independent weaknesses across network,
+application, and mobile layers can be chained together to achieve full system
+compromise when basic security controls are not enforced.
+
+Overall, the project strengthened practical offensive security skills while
+emphasizing the value of structured methodology, accurate documentation, and
+evidence-driven reporting in real-world security assessments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
