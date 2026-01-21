@@ -17,7 +17,6 @@ validation aligned with the **OWASP API Top 10**.
   - Manual request interception
   - Endpoint analysis
   - Parameter tampering
-  - Authorization testing
   - Authentication logic testing
 
 ---
@@ -32,16 +31,12 @@ validation aligned with the **OWASP API Top 10**.
 
 ## Initial Interaction
 
-Two users were created for testing.
+A user was created for testing.
 
 Example user:
-```json
-User-1
+```
 {"name":"lazzer","email":"lazzer@hackcorp.com","number":"1234567890","password":"SuperStrong@123"}
 ```
-
-This allowed validation of authorization flaws by attempting cross-user access.
----
 
 ## Vulnerability 1: Content Discovery & Sensitive Data Exposure
 ### Observation
@@ -50,17 +45,57 @@ While browsing the community posts feature, the frontend did not reveal much
 information. However, inspection of backend API responses using Caido revealed
 that the API exposes sensitive user information.
 
-### Evidence
-
+![project post](Evidence/post_section.png)
 The intercepted response contained:
 ```
-"author": {
-  "nickname": "Robot",
-  "email": "robot001@example.com",
-  "vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5c",
-  "created_at": "2026-01-19T18:07:16.065Z"
+{
+    "posts": [{
+        "id": "8ArJfCiyJEMMTfQdSjeFsF",
+        "title": "Title 3",
+        "content": "Hello world 3",
+        "author": {
+            "nickname": "Robot",
+            "email": "robot001@example.com",
+            "vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5e5",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.065Z"
+        },
+        "comments": [],
+        "authorid": 3,
+        "CreatedAt": "2026-01-19T18:07:16.065Z"
+    }, {
+        "id": "HV2xMr3G4ufcoAFqLPK6hS",
+        "title": "Title 2",
+        "content": "Hello world 2",
+        "author": {
+            "nickname": "Pogba",
+            "email": "pogba006@example.com",
+            "vehicleid": "cd515c12-0fc1-48ae-8b61-9230b70a845b",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.062Z"
+        },
+        "comments": [],
+        "authorid": 2,
+        "CreatedAt": "2026-01-19T18:07:16.062Z"
+    }, {
+        "id": "3gesMwR9Pq8Lhze53E5c4k",
+        "title": "Title 1",
+        "content": "Hello world 1",
+        "author": {
+            "nickname": "Adam",
+            "email": "adam007@example.com",
+            "vehicleid": "f89b5f21-7829-45cb-a650-299a61090378",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.022Z"
+        },
+        "comments": [],
+        "authorid": 1,
+        "CreatedAt": "2026-01-19T18:07:16.022Z"
+    }],
+    "next_offset": null,
+    "previous_offset": null,
+    "total": 3
 }
-
 ```
 
 This behavior exposes:
@@ -71,10 +106,7 @@ This behavior exposes:
 
 - Vehicle identifiers
 
-📸 Screenshots:
-API_Security_Testing/Evidence/content-discovery-1.png
-API_Security_Testing/Evidence/content-discovery-2.png
-
+![project cd](Evidence/Content_discovery.png)
 
 ### Impact
 
@@ -88,10 +120,16 @@ information for further targeted attacks.
 Using the Contact Mechanic feature, backend requests containing ID parameters
 were observed.
 
+![project mech](Evidence/contact_mechanic.png)
+
 The request included a user-specific identifier.
+
+![project id](Evidence/id_request.png)
 
 By modifying the ID value to another user's ID, data belonging to other users
 became accessible.
+
+![project IDOR](Evidence/IDOR.png)
 
 ### Proof of Exploitation
 
@@ -106,17 +144,23 @@ By changing the ID parameter:
 Example sensitive field abused:
 
 ```
-"vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5c"
+{
+    "posts": [{
+        "id": "8ArJfCiyJEMMTfQdSjeFsF",
+        "title": "Title 3",
+        "content": "Hello world 3",
+        "author": {
+            "nickname": "Robot",
+            "email": "robot001@example.com",
+            "vehicleid": "4bae9968-ec7f-4de3-a3a0-ba1b2ab5e5e5",
+            "profile_pic_url": "",
+            "created_at": "2026-01-19T18:07:16.065Z"
+        },
 
 ```
 This was later used to successfully retrieve vehicle location information.
 
-📸 Screenshots:
-
-API_Security_Testing/Evidence/idor-request.png
-API_Security_Testing/Evidence/idor-response.png
-API_Security_Testing/Evidence/location-access.png
-
+![project veh](Evidence/IDOR_vehicle.png)
 
 ### Impact
 
@@ -129,6 +173,8 @@ request parameters.
 ### Observation
 
 The password reset functionality required OTP verification.
+
+![project otp](Evidence/invalid_otp.png)
 
 Invalid OTP attempts returned:
 ```
@@ -148,6 +194,8 @@ controls were bypassed.
 
 This allowed OTP brute-forcing to succeed.
 
+![project by](Evidence/success_otp.png)
+
 Successful request:
 ```
 {"email":"robot001@example.com","otp":"4872","password":"Password@123"}
@@ -156,11 +204,7 @@ Successful request:
 
 The password reset succeeded, resulting in full account takeover.
 
-📸 Screenshots:
-
-API_Security_Testing/Evidence/otp-bypass-header.png
-API_Security_Testing/Evidence/otp-success.png
-API_Security_Testing/Evidence/account-access.png
+![project take](Evidence/account_takeover.png)
 
 ### Impact
 
