@@ -8,6 +8,13 @@ This privilege escalation exercise was performed against a vulnerable lab
 environment based on **Pluck CMS 4.7.16**.
 
 ---
+## Privilege Escalation Summary
+
+Task ID | Technique                   | Target IP        | Status  | Outcome
+------- |-----------------------------|------------------|---------|-----------
+010     | SUID Binary Abuse (GTFOBins) | 192.168.32.129   | Success | Root Shell
+
+---
 
 ## Initial Access Context
 A low-privileged shell was  obtained on the target system as user:
