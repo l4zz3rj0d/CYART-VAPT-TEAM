@@ -38,6 +38,13 @@ Hack The Box "Unika" machine.
 This represents a realistic red-team style workflow.
 
 ---
+## Advanced Exploitation Summary
+
+Exploit ID | Description        | Target        | Status  | Payload
+--------- |--------------------|---------------|---------|-----------
+007       | LFI → NTLM Capture → RCE Chain | unika.htb (10.129.15.41) | Success | Reverse Shell (Evil-WinRM)
+
+---
 
 ## Phase 1: Network Scanning and Enumeration
 
