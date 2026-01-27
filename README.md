@@ -28,7 +28,7 @@ This repository contains weekly submissions completed as part of the CYART Vulne
 
 ## Weekly submissions:
 
-- week 1 - Web application exploitation (Concrete5 CMS RCE via weak credentials and file upload)
+- Week 1 - Web application exploitation (Concrete5 CMS RCE via weak credentials and file upload)
 - Week 2 – Enumeration and exploitation (Apache Tomcat RCE via Metasploit)
 - Week 3 – SSTI exploitation leading to Remote Code Execution (CVE-2024-22722)
 - Week 4 – Network exploitation, privilege escalation, mobile app pentesting (DIVA), and API security testing (crAPI)
