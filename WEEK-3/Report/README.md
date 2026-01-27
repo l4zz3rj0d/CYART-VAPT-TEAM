@@ -41,9 +41,9 @@ confidentiality and integrity.
 
 | Finding ID | Vulnerability | Severity | Evidence |
 |------------|----------------|----------|----------|
-| F-001 | Server-Side Template Injection (SSTI) | Critical | Web-Application-Testing/Evidence |
-| F-002 | Remote Code Execution via SSTI | Critical | Advanced-Exploitation/Evidence |
-| F-003 | Unauthorized System Access | High | Post-Exploitation/Evidence |
+| F-001 | Server-Side Template Injection (SSTI) | Critical | Web-Application-Testing |
+| F-002 | Remote Code Execution via SSTI | Critical | Advanced-Exploitation |
+| F-003 | Unauthorized System Access | High | Post-Exploitation |
 
 All findings were validated manually and supported by captured evidence within
 their respective subdirectories.
